@@ -26,13 +26,10 @@
             --rep-3-color: #AED581; /* คุณสมฤทัย (สุราษฎร์) */
 
             /* --- สีประจำตัวเซลล์ นครศรีธรรมราช --- */
-            /* ปรับสีชมพูให้อ่อนลง (จาก #F06292 เป็น #FFB2C3) */
             --rep-nst-1-color: #FFB2C3; /* ชมพูอ่อน - คุณจินตนา */
-            /* ปรับสีเขียวให้เหมือนสุราษฎร์ฯ (จาก #81C784 เป็น #AED581) */
             --rep-nst-2-color: #AED581; /* เขียวอ่อน - คุณสมฤทัย (นครฯ) */
 
             --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --gemini-purple: #8e44ad;
         }
 
         body {
@@ -160,7 +157,6 @@
             margin: 0 0 0.5rem 0;
             font-size: 1.1rem;
             font-weight: 700;
-            /* color: var(--primary-green); */ /* ให้สีตาม class แทน */
             display: flex;
             align-items: center;
             gap: 8px;
@@ -227,9 +223,19 @@
             margin-bottom: 1.5rem; 
             border-bottom: 2px solid #f0f0f0; 
             padding-bottom: 1rem;
+        }
+        /* Custom Header Layout for Icon + Text */
+        .map-header-title-row {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 5px;
+        }
+        .map-mini-icon {
+            height: 40px;
+            width: auto;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .map-header h3 { margin: 0; font-size: 1.25rem; color: var(--text-dark); }
         .map-header p { margin: 0; color: #888; font-size: 0.9rem; }
@@ -248,7 +254,7 @@
         }
         
         .map-img-preview {
-            max-width: 100%;
+            max-width: 80%; 
             height: auto;
             border-radius: 4px;
             display: block;
@@ -295,7 +301,7 @@
             text-align: center;
             font-weight: 600;
             transition: all 0.2s;
-            cursor: pointer;
+            cursor: default;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             position: relative;
             overflow: visible;
@@ -392,15 +398,13 @@
         .bg-rep3 .district-name { color: #2e3d1d; }
 
         /* Nakhon Si Thammarat */
-        /* ปรับ Gradient ชมพูให้อ่อนลงและเปลี่ยนสีตัวหนังสือเป็นสีเข้ม */
         .bg-rep-nst1 { 
             background: linear-gradient(135deg, #FFD1DC, #FF9EAF); 
-            color: #880E4F; /* สีตัวอักษรแดงเลือดหมูเข้ม เพื่อให้อ่านง่ายบนพื้นอ่อน */
+            color: #880E4F; 
         } 
         .bg-rep-nst1 small { background: rgba(255,255,255,0.4); color: #880E4F; }
         .bg-rep-nst1 .district-name { color: #6A1B4D; }
 
-        /* ปรับให้เหมือน bg-rep3 (สุราษฎร์ธานี) ตามที่ขอ */
         .bg-rep-nst2 { background: linear-gradient(135deg, var(--rep-nst-2-color), #8BC34A); color: #3e2723; } 
         .bg-rep-nst2 small { background: rgba(0,0,0,0.05); color: #3e2723; }
         .bg-rep-nst2 .district-name { color: #2e3d1d; }
@@ -410,45 +414,9 @@
         .text-rep2 { color: #00897B; }
         .text-rep3 { color: #689F38; }
         .text-rep-nst1 { color: #D81B60; }
-        .text-rep-nst2 { color: #689F38; } /* ปรับให้เหมือน text-rep3 */
+        .text-rep-nst2 { color: #689F38; }
 
 
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-        }
-        .modal-content {
-            background: white;
-            width: 90%;
-            max-width: 600px;
-            border-radius: 12px;
-            padding: 2rem;
-            position: relative;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #888;
-            transition: color 0.2s;
-        }
-        .modal-close:hover { color: var(--text-red); }
-        
         /* Image Lightbox Styles */
         .image-modal-overlay {
             position: fixed;
@@ -497,27 +465,6 @@
             text-decoration: none;
             cursor: pointer;
         }
-        
-        .ai-response {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid var(--gemini-purple);
-            font-size: 0.95rem;
-            white-space: pre-wrap;
-        }
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(142, 68, 173, 0.3);
-            border-radius: 50%;
-            border-top-color: var(--gemini-purple);
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
 
         /* Responsive Adjustments */
         @media (max-width: 768px) {
@@ -618,126 +565,130 @@
         <!-- Main Content: พื้นที่ดูแล -->
         <main class="map-section">
             <div class="map-header">
-                <h3><i class="fas fa-map"></i> ภาพรวมพื้นที่ (Zoning)</h3>
-                <p>คลิกที่แผนที่เพื่อดูภาพขยาย หรือคลิกที่อำเภอในตารางเพื่อวิเคราะห์ข้อมูล ✨</p>
+                <div class="map-header-title-row">
+                    <!-- รูปเล็กข้างคำว่า ภาพรวมพื้นที่ (สุราษฎร์ธานี) -->
+                    <img src="https://i.postimg.cc/K8njvXTD/การแบ_งพ_นท_ขาย.jpg" alt="Surat Thani Map Icon" class="map-mini-icon">
+                    <h3><i class="fas fa-map"></i> ภาพรวมพื้นที่ (Zoning)</h3>
+                </div>
+                <p>คลิกที่แผนที่เพื่อดูภาพขยาย</p>
             </div>
 
-            <!-- รูปแผนที่จริง พร้อมปุ่มขยาย -->
-            <div class="map-container" onclick="openImageModal('https://i.postimg.cc/K8njvXTD/kar-bae-ngph-nth-khay.jpg')">
-                <img src="https://i.postimg.cc/K8njvXTD/kar-bae-ngph-nth-khay.jpg" alt="แผนที่เขตการขาย AG-ZIENCE" class="map-img-preview">
+            <!-- รูปแผนที่จริง พร้อมปุ่มขยาย (สุราษฎร์ธานี) -->
+            <div class="map-container" onclick="openImageModal('https://i.postimg.cc/K8njvXTD/การแบ_งพ_นท_ขาย.jpg')">
+                <img src="https://i.postimg.cc/K8njvXTD/การแบ_งพ_นท_ขาย.jpg" alt="แผนที่เขตการขาย AG-ZIENCE" class="map-img-preview">
                 <div class="zoom-btn"><i class="fas fa-search-plus"></i> ขยายภาพ</div>
             </div>
             
             <div class="district-grid">
                 <!-- Zone: คุณสุชาติ -->
-                <div class="district-box bg-rep1" onclick="analyzeDistrict('กิ่ง อ.วิภาวดี')">
+                <div class="district-box bg-rep1">
                     <img src="https://i.postimg.cc/zv1GK0Kp/ส_ชาต_คงรอด.webp" class="hover-rep-img" alt="คุณสุชาติ">
                     <span class="district-name">กิ่ง อ.วิภาวดี</span>
                     <small>คุณสุชาติ</small>
                 </div>
-                <div class="district-box bg-rep1" onclick="analyzeDistrict('อ.บ้านตาขุน')">
+                <div class="district-box bg-rep1">
                     <img src="https://i.postimg.cc/zv1GK0Kp/ส_ชาต_คงรอด.webp" class="hover-rep-img" alt="คุณสุชาติ">
                     <span class="district-name">อ.บ้านตาขุน</span>
                     <small>คุณสุชาติ</small>
                 </div>
-                <div class="district-box bg-rep1" onclick="analyzeDistrict('อ.คีรีรัฐนิคม')">
+                <div class="district-box bg-rep1">
                     <img src="https://i.postimg.cc/zv1GK0Kp/ส_ชาต_คงรอด.webp" class="hover-rep-img" alt="คุณสุชาติ">
                     <div class="hover-exception-info">ยกเว้น: เชษฐ (โอ)</div>
                     <span class="district-name">อ.คีรีรัฐนิคม</span>
                     <small>คุณสุชาติ</small>
                 </div>
-                <div class="district-box bg-rep1" onclick="analyzeDistrict('อ.พนม')">
+                <div class="district-box bg-rep1">
                     <img src="https://i.postimg.cc/zv1GK0Kp/ส_ชาต_คงรอด.webp" class="hover-rep-img" alt="คุณสุชาติ">
                     <span class="district-name">อ.พนม</span>
                     <small>คุณสุชาติ</small>
                 </div>
-                <div class="district-box bg-rep1" onclick="analyzeDistrict('อ.เคียนซา')">
+                <div class="district-box bg-rep1">
                     <img src="https://i.postimg.cc/zv1GK0Kp/ส_ชาต_คงรอด.webp" class="hover-rep-img" alt="คุณสุชาติ">
                     <span class="district-name">อ.เคียนซา</span>
                     <small>คุณสุชาติ</small>
                 </div>
-                <div class="district-box bg-rep1" onclick="analyzeDistrict('อ.พระแสง')">
+                <div class="district-box bg-rep1">
                     <img src="https://i.postimg.cc/zv1GK0Kp/ส_ชาต_คงรอด.webp" class="hover-rep-img" alt="คุณสุชาติ">
                     <span class="district-name">อ.พระแสง</span>
                     <small>คุณสุชาติ</small>
                 </div>
-                <div class="district-box bg-rep1" style="opacity: 0.8;" onclick="analyzeDistrict('จ.พังงา')">
+                <div class="district-box bg-rep1" style="opacity: 0.8;">
                     <img src="https://i.postimg.cc/zv1GK0Kp/ส_ชาต_คงรอด.webp" class="hover-rep-img" alt="คุณสุชาติ">
                     <span class="district-name">จ.พังงา</span>
                     <small>คุณสุชาติ</small>
                 </div>
-                <div class="district-box bg-rep1" style="opacity: 0.8;" onclick="analyzeDistrict('จ.กระบี่')">
+                <div class="district-box bg-rep1" style="opacity: 0.8;">
                     <img src="https://i.postimg.cc/zv1GK0Kp/ส_ชาต_คงรอด.webp" class="hover-rep-img" alt="คุณสุชาติ">
                     <span class="district-name">จ.กระบี่</span>
                     <small>คุณสุชาติ</small>
                 </div>
 
                 <!-- Zone: คุณกิติณภัช -->
-                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.ท่าชนะ')">
+                <div class="district-box bg-rep2">
                     <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
                     <span class="district-name">อ.ท่าชนะ</span>
                     <small>คุณกิติณภัช</small>
                 </div>
-                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.ไชยา')">
+                <div class="district-box bg-rep2">
                     <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
                     <span class="district-name">อ.ไชยา</span>
                     <small>คุณกิติณภัช</small>
                 </div>
-                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.ท่าฉาง')">
+                <div class="district-box bg-rep2">
                     <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
                     <span class="district-name">อ.ท่าฉาง</span>
                     <small>คุณกิติณภัช</small>
                 </div>
-                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.พุนพิน')">
+                <div class="district-box bg-rep2">
                     <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
                     <span class="district-name">อ.พุนพิน</span>
                     <small>คุณกิติณภัช</small>
                 </div>
-                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.เมือง สุราษฎร์ธานี')">
+                <div class="district-box bg-rep2">
                     <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
                     <span class="district-name">อ.เมือง</span>
                     <small>คุณกิติณภัช</small>
                 </div>
-                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.บ้านนาเดิม')">
+                <div class="district-box bg-rep2">
                     <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
                     <span class="district-name">อ.บ้านนาเดิม</span>
                     <small>คุณกิติณภัช</small>
                 </div>
-                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.กาญจนดิษฐ์')">
+                <div class="district-box bg-rep2">
                     <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
                     <span class="district-name">อ.กาญจนดิษฐ์</span>
                     <small>คุณกิติณภัช</small>
                 </div>
-                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.ดอนสัก')">
+                <div class="district-box bg-rep2">
                     <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
                     <div class="hover-exception-info">ยกเว้น: ศักดา (แบม)</div>
                     <span class="district-name">อ.ดอนสัก</span>
                     <small>คุณกิติณภัช</small>
                 </div>
-                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.เกาะสมุย')">
+                <div class="district-box bg-rep2">
                     <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
                     <div class="hover-exception-info">ยกเว้น: มาร์ชพีช (แบม)</div>
                     <span class="district-name">อ.เกาะสมุย</span>
                     <small>คุณกิติณภัช</small>
                 </div>
-                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.เกาะพะงัน')">
+                <div class="district-box bg-rep2">
                     <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
                     <span class="district-name">อ.เกาะพะงัน</span>
                     <small>คุณกิติณภัช</small>
                 </div>
 
                 <!-- Zone: คุณสมฤทัย -->
-                <div class="district-box bg-rep3" onclick="analyzeDistrict('อ.ชัยบุรี')">
+                <div class="district-box bg-rep3">
                     <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
                     <span class="district-name">อ.ชัยบุรี</span>
                     <small>คุณสมฤทัย</small>
                 </div>
-                <div class="district-box bg-rep3" onclick="analyzeDistrict('อ.เวียงสระ')">
+                <div class="district-box bg-rep3">
                     <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
                     <span class="district-name">อ.เวียงสระ</span>
                     <small>คุณสมฤทัย</small>
                 </div>
-                <div class="district-box bg-rep3" onclick="analyzeDistrict('อ.บ้านนาสาร')">
+                <div class="district-box bg-rep3">
                     <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
                     <div class="hover-exception-info">ยกเว้น: ดร.แอ๊ว (โต)</div>
                     <span class="district-name">อ.บ้านนาสาร</span>
@@ -810,131 +761,135 @@
         <!-- Main Content: พื้นที่ดูแล นครฯ -->
         <main class="map-section">
             <div class="map-header">
-                <h3><i class="fas fa-map"></i> ภาพรวมพื้นที่ (Zoning)</h3>
-                <p>คลิกที่แผนที่เพื่อดูภาพขยาย หรือคลิกที่อำเภอในตารางเพื่อวิเคราะห์ข้อมูล ✨</p>
+                <div class="map-header-title-row">
+                    <!-- รูปเล็กข้างคำว่า ภาพรวมพื้นที่ (นครศรีธรรมราช) -->
+                    <img src="https://i.postimg.cc/SQLC4K80/การแบ_งพ_นท_ขาย_นครศร_ฯ.jpg" alt="Nakhon Si Map Icon" class="map-mini-icon">
+                    <h3><i class="fas fa-map"></i> ภาพรวมพื้นที่ (Zoning)</h3>
+                </div>
+                <p>คลิกที่แผนที่เพื่อดูภาพขยาย</p>
             </div>
 
             <!-- รูปแผนที่จริง พร้อมปุ่มขยาย (นครศรีธรรมราช) -->
-            <div class="map-container" onclick="openImageModal('https://i.postimg.cc/SQLC4K80/kar-bae-ngph-nth-khay-nkhr-sr-‡.jpg')">
-                <img src="https://i.postimg.cc/SQLC4K80/kar-bae-ngph-nth-khay-nkhr-sr-‡.jpg" alt="แผนที่เขตการขาย จ.นครศรีธรรมราช AG-ZIENCE" class="map-img-preview">
+            <div class="map-container" onclick="openImageModal('https://i.postimg.cc/SQLC4K80/การแบ_งพ_นท_ขาย_นครศร_ฯ.jpg')">
+                <img src="https://i.postimg.cc/SQLC4K80/การแบ_งพ_นท_ขาย_นครศร_ฯ.jpg" alt="แผนที่เขตการขาย จ.นครศรีธรรมราช AG-ZIENCE" class="map-img-preview">
                 <div class="zoom-btn"><i class="fas fa-search-plus"></i> ขยายภาพ</div>
             </div>
             
             <div class="district-grid">
                 <!-- Zone: คุณจินตนา (สีชมพู) -->
-                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.ขนอม')">
+                <div class="district-box bg-rep-nst1">
                     <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
                     <span class="district-name">อ.ขนอม</span>
                     <small>คุณจินตนา</small>
                 </div>
-                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.สิชล')">
+                <div class="district-box bg-rep-nst1">
                     <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
                     <span class="district-name">อ.สิชล</span>
                     <small>คุณจินตนา</small>
                 </div>
-                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.นบพิตำ')">
+                <div class="district-box bg-rep-nst1">
                     <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
                     <span class="district-name">อ.นบพิตำ</span>
                     <small>คุณจินตนา</small>
                 </div>
-                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.ท่าศาลา')">
+                <div class="district-box bg-rep-nst1">
                     <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
                     <span class="district-name">อ.ท่าศาลา</span>
                     <small>คุณจินตนา</small>
                 </div>
-                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.พิปูน')">
+                <div class="district-box bg-rep-nst1">
                     <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
                     <span class="district-name">อ.พิปูน</span>
                     <small>คุณจินตนา</small>
                 </div>
-                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.พรหมคีรี')">
+                <div class="district-box bg-rep-nst1">
                     <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
                     <span class="district-name">อ.พรหมคีรี</span>
                     <small>คุณจินตนา</small>
                 </div>
-                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.เมือง นครศรีฯ')">
+                <div class="district-box bg-rep-nst1">
                     <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
                     <span class="district-name">อ.เมือง</span>
                     <small>คุณจินตนา</small>
                 </div>
-                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.ลานสกา')">
+                <div class="district-box bg-rep-nst1">
                     <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
                     <span class="district-name">อ.ลานสกา</span>
                     <small>คุณจินตนา</small>
                 </div>
-                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.พระพรหม')">
+                <div class="district-box bg-rep-nst1">
                     <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
                     <span class="district-name">อ.พระพรหม</span>
                     <small>คุณจินตนา</small>
                 </div>
-                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.ปากพนัง')">
+                <div class="district-box bg-rep-nst1">
                     <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
                     <span class="district-name">อ.ปากพนัง</span>
                     <small>คุณจินตนา</small>
                 </div>
-                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.ร่อนพิบูลย์')">
+                <div class="district-box bg-rep-nst1">
                     <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
                     <span class="district-name">อ.ร่อนพิบูลย์</span>
                     <small>คุณจินตนา</small>
                 </div>
-                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.เฉลิมพระเกียรติ')">
+                <div class="district-box bg-rep-nst1">
                     <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
                     <span class="district-name">อ.เฉลิมฯ</span>
                     <small>คุณจินตนา</small>
                 </div>
-                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.จุฬาภรณ์')">
+                <div class="district-box bg-rep-nst1">
                     <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
                     <span class="district-name">อ.จุฬาภรณ์</span>
                     <small>คุณจินตนา</small>
                 </div>
-                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.เชียรใหญ่')">
+                <div class="district-box bg-rep-nst1">
                     <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
                     <span class="district-name">อ.เชียรใหญ่</span>
                     <small>คุณจินตนา</small>
                 </div>
-                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.ชะอวด')">
+                <div class="district-box bg-rep-nst1">
                     <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
                     <span class="district-name">อ.ชะอวด</span>
                     <small>คุณจินตนา</small>
                 </div>
-                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.หัวไทร')">
+                <div class="district-box bg-rep-nst1">
                     <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
                     <span class="district-name">อ.หัวไทร</span>
                     <small>คุณจินตนา</small>
                 </div>
 
                 <!-- Zone: คุณสมฤทัย (นครฯ) (สีเขียว) -->
-                <div class="district-box bg-rep-nst2" onclick="analyzeDistrict('อ.ถ้ำพรรณรา')">
+                <div class="district-box bg-rep-nst2">
                     <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
                     <span class="district-name">อ.ถ้ำพรรณรา</span>
                     <small>คุณสมฤทัย</small>
                 </div>
-                <div class="district-box bg-rep-nst2" onclick="analyzeDistrict('อ.ฉวาง')">
+                <div class="district-box bg-rep-nst2">
                     <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
                     <span class="district-name">อ.ฉวาง</span>
                     <small>คุณสมฤทัย</small>
                 </div>
-                <div class="district-box bg-rep-nst2" onclick="analyzeDistrict('อ.ช้างกลาง')">
+                <div class="district-box bg-rep-nst2">
                     <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
                     <span class="district-name">อ.ช้างกลาง</span>
                     <small>คุณสมฤทัย</small>
                 </div>
-                <div class="district-box bg-rep-nst2" onclick="analyzeDistrict('อ.นาบอน')">
+                <div class="district-box bg-rep-nst2">
                     <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
                     <span class="district-name">อ.นาบอน</span>
                     <small>คุณสมฤทัย</small>
                 </div>
-                <div class="district-box bg-rep-nst2" onclick="analyzeDistrict('อ.ทุ่งใหญ่')">
+                <div class="district-box bg-rep-nst2">
                     <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
                     <span class="district-name">อ.ทุ่งใหญ่</span>
                     <small>คุณสมฤทัย</small>
                 </div>
-                <div class="district-box bg-rep-nst2" onclick="analyzeDistrict('อ.ทุ่งสง')">
+                <div class="district-box bg-rep-nst2">
                     <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
                     <span class="district-name">อ.ทุ่งสง</span>
                     <small>คุณสมฤทัย</small>
                 </div>
-                <div class="district-box bg-rep-nst2" onclick="analyzeDistrict('อ.บางขัน')">
+                <div class="district-box bg-rep-nst2">
                     <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
                     <span class="district-name">อ.บางขัน</span>
                     <small>คุณสมฤทัย</small>
@@ -997,78 +952,13 @@
         </div>
     </footer>
 
-    <!-- AI Modal -->
-    <div class="modal-overlay" id="aiModal">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
-            <h3 id="modalTitle" style="color: var(--primary-green); margin-top:0;">Gemini Assistant ✨</h3>
-            <div id="modalBody">
-                <!-- Content will be injected here -->
-            </div>
-        </div>
-    </div>
-
     <!-- Image Lightbox Modal -->
     <div id="imageModal" class="image-modal-overlay" onclick="closeImageModal()">
         <span class="image-modal-close" onclick="closeImageModal()">&times;</span>
         <img class="image-modal-content" id="img01">
     </div>
 
-    <script type="module">
-        import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
-
-        const apiKey = ""; // System provides the key
-        const genAI = new GoogleGenerativeAI(apiKey);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-preview-09-2025" });
-
-        // Make functions globally available
-        window.analyzeDistrict = async function(districtName) {
-            openModal("กำลังวิเคราะห์ข้อมูลการเกษตร " + districtName + "...");
-            
-            const prompt = `ในฐานะผู้เชี่ยวชาญด้านการเกษตรและปุ๋ยของ AG-ZIENCE:
-            ช่วยวิเคราะห์ข้อมูลของ "${districtName} จ.สุราษฎร์ธานี หรือ จ.นครศรีธรรมราช" (ระบุให้ชัดเจนตามชื่ออำเภอ) สั้นๆ:
-            1. พืชเศรษฐกิจหลักในพื้นที่นี้คืออะไร? (เน้น ปาล์มน้ำมัน, ยางพารา, ทุเรียน, หรือผลไม้อื่นๆ)
-            2. แนวโน้มปัญหาพืชหรือศัตรูพืชที่พบบ่อยในช่วงนี้
-            3. แนะนำผลิตภัณฑ์ปุ๋ยหรือเคมีเกษตรที่น่าจะขายดีในพื้นที่นี้
-            
-            ตอบเป็นภาษาไทย กระชับ เป็นข้อๆ และเป็นกันเอง`;
-
-            try {
-                const result = await model.generateContent(prompt);
-                const response = await result.response;
-                updateModalContent(`🌱 ข้อมูลเชิงลึก: ${districtName}`, response.text());
-            } catch (error) {
-                updateModalContent("เกิดข้อผิดพลาด", "ไม่สามารถเชื่อมต่อกับ AI ได้ในขณะนี้ กรุณาลองใหม่อีกครั้ง");
-                console.error(error);
-            }
-        };
-
-        // Modal Helpers for AI
-        const modal = document.getElementById('aiModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalBody = document.getElementById('modalBody');
-
-        window.openModal = function(loadingText) {
-            modal.style.display = 'flex';
-            modalTitle.innerText = "Gemini Assistant ✨";
-            modalBody.innerHTML = `<div style="text-align:center; padding: 20px;"><div class="loading-spinner"></div> ${loadingText}</div>`;
-        }
-
-        function updateModalContent(title, text) {
-            modalTitle.innerText = title;
-            // Convert simple markdown to HTML tags for better display
-            let formattedText = text
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\* (.*?)\n/g, '<li>$1</li>')
-                .replace(/\n/g, '<br>');
-            
-            modalBody.innerHTML = `<div class="ai-response">${formattedText}</div>`;
-        }
-
-        window.closeModal = function() {
-            modal.style.display = 'none';
-        }
-
+    <script>
         // Image Lightbox Helpers
         window.openImageModal = function(src) {
             document.getElementById('imageModal').style.display = "flex";
@@ -1077,13 +967,6 @@
 
         window.closeImageModal = function() {
             document.getElementById('imageModal').style.display = "none";
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                closeModal();
-            }
         }
     </script>
 </body>
