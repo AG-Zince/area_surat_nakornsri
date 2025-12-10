@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AG-ZIENCE - พื้นที่การดูแลเกษตรกร</title>
+    <!-- นำเข้าฟอนต์ภาษาไทย -->
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- นำเข้า Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- นำเข้า Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- CSS Styles -->
+    <style>
+        :root {
+            --primary-green: #4F7F28;
+            --accent-green: #8CC63F;
+            --bg-gray: #f8f9fa;
+            --text-dark: #2c3e50;
+            --text-red: #d32f2f;
+            
+            /* --- สีประจำตัวเซลล์ สุราษฎร์ธานี --- */
+            --rep-1-color: #8DADC2; /* คุณสุชาติ */
+            --rep-2-color: #4DB6AC; /* คุณกิติณภัช */
+            --rep-3-color: #AED581; /* คุณสมฤทัย (สุราษฎร์) */
+
+            /* --- สีประจำตัวเซลล์ นครศรีธรรมราช --- */
+            /* ปรับสีชมพูให้อ่อนลง (จาก #F06292 เป็น #FFB2C3) */
+            --rep-nst-1-color: #FFB2C3; /* ชมพูอ่อน - คุณจินตนา */
+            /* ปรับสีเขียวให้เหมือนสุราษฎร์ฯ (จาก #81C784 เป็น #AED581) */
+            --rep-nst-2-color: #AED581; /* เขียวอ่อน - คุณสมฤทัย (นครฯ) */
+
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --gemini-purple: #8e44ad;
+        }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Header Section */
+        header {
+            background-color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border-top: 5px solid var(--primary-green);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-logo-img {
+            height: 60px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .page-header-info {
+            text-align: right;
+        }
+        .page-header-info h2 { 
+            margin: 0; 
+            font-size: 1.1rem; 
+            color: #444; 
+            font-weight: 600;
+        }
+        
+        /* Section Divider Title */
+        .province-title {
+            width: 100%;
+            text-align: center;
+            margin: 3rem 0 1rem 0;
+            position: relative;
+        }
+        .province-title h2 {
+            background: var(--primary-green);
+            color: white;
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(79, 127, 40, 0.3);
+        }
+
+        /* Main Layout */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 1280px;
+            margin: 0 auto 3rem auto;
+            padding: 0 1rem;
+            gap: 2rem;
+        }
+
+        /* Sidebar - Reps List */
+        .sidebar {
+            flex: 1;
+            min-width: 320px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+            height: fit-content;
+        }
+
+        .sidebar-header {
+            background: #f1f1f1;
+            padding: 1rem 1.5rem;
+            font-weight: 700;
+            color: #555;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .rep-card {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            gap: 1.5rem;
+            transition: background-color 0.2s;
+            align-items: flex-start;
+        }
+        
+        .rep-card:last-child { border-bottom: none; }
+        .rep-card:hover { background-color: #fafafa; }
+
+        .rep-img-container {
+            flex-shrink: 0;
+        }
+        
+        .rep-img {
+            width: 110px;
+            height: 110px;
+            background-color: #ddd;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .rep-img:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+        }
+
+        .rep-info { flex-grow: 1; }
+        
+        .rep-name {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+            font-weight: 700;
+            /* color: var(--primary-green); */ /* ให้สีตาม class แทน */
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .color-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .area-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.95rem;
+            color: #444;
+        }
+        .area-list li {
+            margin-bottom: 6px;
+            position: relative;
+            padding-left: 18px;
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+        }
+        
+        .area-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 9px;
+            width: 6px;
+            height: 6px;
+            background-color: #aaa;
+            border-radius: 50%;
+        }
+        
+        .exception-tag {
+            display: inline;
+            background-color: transparent;
+            color: var(--text-red);
+            font-size: 0.85rem;
+            padding: 0;
+            border-radius: 0;
+            border: none;
+            margin-left: 5px;
+            font-weight: 600;
+        }
+        
+        /* Map Representation Area */
+        .map-section {
+            flex: 2;
+            min-width: 320px;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-card);
+        }
+        
+        .map-header { 
+            margin-bottom: 1.5rem; 
+            border-bottom: 2px solid #f0f0f0; 
+            padding-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .map-header h3 { margin: 0; font-size: 1.25rem; color: var(--text-dark); }
+        .map-header p { margin: 0; color: #888; font-size: 0.9rem; }
+
+        /* Map Container with Zoom Button */
+        .map-container {
+            position: relative;
+            margin-bottom: 25px;
+            text-align: center;
+            background: #fdfdfd;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px dashed #ddd;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .map-img-preview {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            display: block;
+            margin: 0 auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .map-container:hover .map-img-preview {
+            transform: scale(1.02);
+        }
+
+        .zoom-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+            pointer-events: none;
+        }
+        
+        .map-container:hover .zoom-btn {
+            background-color: var(--primary-green);
+        }
+
+        .district-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+        }
+
+        /* District Box Styling */
+        .district-box {
+            padding: 1rem;
+            border-radius: 12px;
+            color: white;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.2s;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: visible;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 80px;
+        }
+        .district-box:hover { 
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+        
+        .hover-rep-img {
+            position: absolute;
+            top: -25px;
+            right: -10px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+            object-fit: cover;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+        }
+        
+        .district-box:hover .hover-rep-img {
+            opacity: 1;
+            transform: scale(1);
+            top: -35px;
+        }
+
+        .hover-exception-info {
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.5);
+            background: rgba(220, 53, 69, 0.95);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: normal;
+            white-space: nowrap;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 20;
+            border: 1px solid white;
+        }
+
+        .district-box:hover .hover-exception-info {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+            bottom: -35px;
+        }
+        
+        .hover-exception-info::before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 5px 5px 5px;
+            border-style: solid;
+            border-color: transparent transparent rgba(220, 53, 69, 0.95) transparent;
+        }
+
+        .district-box small { 
+            display: block; 
+            font-weight: 300; 
+            font-size: 0.75rem; 
+            margin-top: 6px; 
+            opacity: 0.9; 
+            background: rgba(0,0,0,0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .district-name { font-size: 1rem; z-index: 1; }
+
+        /* Color Coding Classes */
+        /* Surat Thani */
+        .bg-rep1 { background: linear-gradient(135deg, var(--rep-1-color), #809AAD); }
+        .bg-rep2 { background: linear-gradient(135deg, var(--rep-2-color), #26a69a); }
+        .bg-rep3 { background: linear-gradient(135deg, var(--rep-3-color), #8BC34A); color: #3e2723; }
+        .bg-rep3 small { background: rgba(0,0,0,0.05); color: #3e2723; }
+        .bg-rep3 .district-name { color: #2e3d1d; }
+
+        /* Nakhon Si Thammarat */
+        /* ปรับ Gradient ชมพูให้อ่อนลงและเปลี่ยนสีตัวหนังสือเป็นสีเข้ม */
+        .bg-rep-nst1 { 
+            background: linear-gradient(135deg, #FFD1DC, #FF9EAF); 
+            color: #880E4F; /* สีตัวอักษรแดงเลือดหมูเข้ม เพื่อให้อ่านง่ายบนพื้นอ่อน */
+        } 
+        .bg-rep-nst1 small { background: rgba(255,255,255,0.4); color: #880E4F; }
+        .bg-rep-nst1 .district-name { color: #6A1B4D; }
+
+        /* ปรับให้เหมือน bg-rep3 (สุราษฎร์ธานี) ตามที่ขอ */
+        .bg-rep-nst2 { background: linear-gradient(135deg, var(--rep-nst-2-color), #8BC34A); color: #3e2723; } 
+        .bg-rep-nst2 small { background: rgba(0,0,0,0.05); color: #3e2723; }
+        .bg-rep-nst2 .district-name { color: #2e3d1d; }
+
+        /* Text Colors for Rep Names */
+        .text-rep1 { color: #5D8AA8; }
+        .text-rep2 { color: #00897B; }
+        .text-rep3 { color: #689F38; }
+        .text-rep-nst1 { color: #D81B60; }
+        .text-rep-nst2 { color: #689F38; } /* ปรับให้เหมือน text-rep3 */
+
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #888;
+            transition: color 0.2s;
+        }
+        .modal-close:hover { color: var(--text-red); }
+        
+        /* Image Lightbox Styles */
+        .image-modal-overlay {
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        .image-modal-content {
+            margin: auto;
+            display: block;
+            max-width: 95%;
+            max-height: 95vh;
+            object-fit: contain;
+            animation-name: zoom;
+            animation-duration: 0.4s;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        @keyframes zoom {
+            from {transform:scale(0.8); opacity: 0;}
+            to {transform:scale(1); opacity: 1;}
+        }
+        .image-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            z-index: 2001;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .image-modal-close:hover,
+        .image-modal-close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .ai-response {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid var(--gemini-purple);
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(142, 68, 173, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--gemini-purple);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            header { justify-content: center; text-align: center; gap: 10px; }
+            .page-header-info { text-align: center; width: 100%; margin-top: 10px; }
+            .container { flex-direction: column; }
+            .sidebar { order: 2; }
+            .map-section { order: 1; }
+            
+            .rep-card { flex-direction: column; align-items: center; text-align: center; gap: 1rem; }
+            .rep-name { justify-content: center; }
+            .area-list li { text-align: left; display: inline-block; margin-right: 10px; background: #eee; padding: 2px 10px 2px 25px; border-radius: 15px; }
+            .area-list li::before { left: 10px; top: 6px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-logo">
+            <img src="https://i.postimg.cc/Jh8b2SdJ/logo-ag-zience-02.png" alt="AG-ZIENCE Logo" class="brand-logo-img">
+        </div>
+        <div class="page-header-info">
+            <h2>พื้นที่การดูแลเกษตรกรและจำหน่ายผลิตภัณฑ์ "ปุ๋ยอ.ภพ"</h2>
+        </div>
+    </header>
+
+    <!-- SECTION 1: สุราษฎร์ธานี -->
+    <div class="province-title">
+        <h2>จ.สุราษฎร์ธานี</h2>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar: รายชื่อ Head Coach -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-users"></i> ทีมผู้ดูแลพื้นที่ (Head Coach)
+            </div>
+
+            <!-- คนที่ 1: คุณสุชาติ -->
+            <div class="rep-card">
+                <div class="rep-img-container">
+                    <img src="https://i.postimg.cc/zv1GK0Kp/ส_ชาต_คงรอด.webp" alt="คุณสุชาติ" class="rep-img">
+                </div>
+                <div class="rep-info">
+                    <h3 class="rep-name text-rep1"><span class="color-dot bg-rep1"></span> คุณสุชาติ คงรอด</h3>
+                    <ul class="area-list">
+                        <li>กิ่ง อ.วิภาวดี</li>
+                        <li>อ.บ้านตาขุน</li>
+                        <li>อ.คีรีรัฐนิคม <span class="exception-tag">ยกเว้น: เชษฐ (โอ)</span></li>
+                        <li>อ.พนม</li>
+                        <li>อ.เคียนซา</li>
+                        <li>อ.พระแสง</li>
+                        <li>จ.พังงา</li>
+                        <li>จ.กระบี่</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- คนที่ 2: คุณกิติณภัช -->
+            <div class="rep-card">
+                <div class="rep-img-container">
+                    <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" alt="คุณกิติณภัช" class="rep-img">
+                </div>
+                <div class="rep-info">
+                    <h3 class="rep-name text-rep2"><span class="color-dot bg-rep2"></span> คุณกิติณภัช พรหมอักษร</h3>
+                    <ul class="area-list">
+                        <li>อ.ท่าชนะ</li>
+                        <li>อ.ไชยา</li>
+                        <li>อ.ท่าฉาง</li>
+                        <li>อ.พุนพิน</li>
+                        <li>อ.เมือง</li>
+                        <li>อ.บ้านนาเดิม</li>
+                        <li>อ.กาญจนดิษฐ์</li>
+                        <li>อ.ดอนสัก <span class="exception-tag">ยกเว้น: ศักดา (แบม)</span></li>
+                        <li>อ.เกาะสมุย <span class="exception-tag">ยกเว้น: มาร์ชพีช (แบม)</span></li>
+                        <li>อ.เกาะพะงัน</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- คนที่ 3: คุณสมฤทัย -->
+            <div class="rep-card">
+                <div class="rep-img-container">
+                    <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" alt="คุณสมฤทัย" class="rep-img">
+                </div>
+                <div class="rep-info">
+                    <h3 class="rep-name text-rep3"><span class="color-dot bg-rep3"></span> คุณสมฤทัย แปนุ่น</h3>
+                    <ul class="area-list">
+                        <li>อ.ชัยบุรี</li>
+                        <li>อ.เวียงสระ</li>
+                        <li>อ.บ้านนาสาร <span class="exception-tag">ยกเว้น: ดร.แอ๊ว (โต)</span></li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content: พื้นที่ดูแล -->
+        <main class="map-section">
+            <div class="map-header">
+                <h3><i class="fas fa-map"></i> ภาพรวมพื้นที่ (Zoning)</h3>
+                <p>คลิกที่แผนที่เพื่อดูภาพขยาย หรือคลิกที่อำเภอในตารางเพื่อวิเคราะห์ข้อมูล ✨</p>
+            </div>
+
+            <!-- รูปแผนที่จริง พร้อมปุ่มขยาย -->
+            <div class="map-container" onclick="openImageModal('https://i.postimg.cc/K8njvXTD/kar-bae-ngph-nth-khay.jpg')">
+                <img src="https://i.postimg.cc/K8njvXTD/kar-bae-ngph-nth-khay.jpg" alt="แผนที่เขตการขาย AG-ZIENCE" class="map-img-preview">
+                <div class="zoom-btn"><i class="fas fa-search-plus"></i> ขยายภาพ</div>
+            </div>
+            
+            <div class="district-grid">
+                <!-- Zone: คุณสุชาติ -->
+                <div class="district-box bg-rep1" onclick="analyzeDistrict('กิ่ง อ.วิภาวดี')">
+                    <img src="https://i.postimg.cc/zv1GK0Kp/ส_ชาต_คงรอด.webp" class="hover-rep-img" alt="คุณสุชาติ">
+                    <span class="district-name">กิ่ง อ.วิภาวดี</span>
+                    <small>คุณสุชาติ</small>
+                </div>
+                <div class="district-box bg-rep1" onclick="analyzeDistrict('อ.บ้านตาขุน')">
+                    <img src="https://i.postimg.cc/zv1GK0Kp/ส_ชาต_คงรอด.webp" class="hover-rep-img" alt="คุณสุชาติ">
+                    <span class="district-name">อ.บ้านตาขุน</span>
+                    <small>คุณสุชาติ</small>
+                </div>
+                <div class="district-box bg-rep1" onclick="analyzeDistrict('อ.คีรีรัฐนิคม')">
+                    <img src="https://i.postimg.cc/zv1GK0Kp/ส_ชาต_คงรอด.webp" class="hover-rep-img" alt="คุณสุชาติ">
+                    <div class="hover-exception-info">ยกเว้น: เชษฐ (โอ)</div>
+                    <span class="district-name">อ.คีรีรัฐนิคม</span>
+                    <small>คุณสุชาติ</small>
+                </div>
+                <div class="district-box bg-rep1" onclick="analyzeDistrict('อ.พนม')">
+                    <img src="https://i.postimg.cc/zv1GK0Kp/ส_ชาต_คงรอด.webp" class="hover-rep-img" alt="คุณสุชาติ">
+                    <span class="district-name">อ.พนม</span>
+                    <small>คุณสุชาติ</small>
+                </div>
+                <div class="district-box bg-rep1" onclick="analyzeDistrict('อ.เคียนซา')">
+                    <img src="https://i.postimg.cc/zv1GK0Kp/ส_ชาต_คงรอด.webp" class="hover-rep-img" alt="คุณสุชาติ">
+                    <span class="district-name">อ.เคียนซา</span>
+                    <small>คุณสุชาติ</small>
+                </div>
+                <div class="district-box bg-rep1" onclick="analyzeDistrict('อ.พระแสง')">
+                    <img src="https://i.postimg.cc/zv1GK0Kp/ส_ชาต_คงรอด.webp" class="hover-rep-img" alt="คุณสุชาติ">
+                    <span class="district-name">อ.พระแสง</span>
+                    <small>คุณสุชาติ</small>
+                </div>
+                <div class="district-box bg-rep1" style="opacity: 0.8;" onclick="analyzeDistrict('จ.พังงา')">
+                    <img src="https://i.postimg.cc/zv1GK0Kp/ส_ชาต_คงรอด.webp" class="hover-rep-img" alt="คุณสุชาติ">
+                    <span class="district-name">จ.พังงา</span>
+                    <small>คุณสุชาติ</small>
+                </div>
+                <div class="district-box bg-rep1" style="opacity: 0.8;" onclick="analyzeDistrict('จ.กระบี่')">
+                    <img src="https://i.postimg.cc/zv1GK0Kp/ส_ชาต_คงรอด.webp" class="hover-rep-img" alt="คุณสุชาติ">
+                    <span class="district-name">จ.กระบี่</span>
+                    <small>คุณสุชาติ</small>
+                </div>
+
+                <!-- Zone: คุณกิติณภัช -->
+                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.ท่าชนะ')">
+                    <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
+                    <span class="district-name">อ.ท่าชนะ</span>
+                    <small>คุณกิติณภัช</small>
+                </div>
+                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.ไชยา')">
+                    <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
+                    <span class="district-name">อ.ไชยา</span>
+                    <small>คุณกิติณภัช</small>
+                </div>
+                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.ท่าฉาง')">
+                    <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
+                    <span class="district-name">อ.ท่าฉาง</span>
+                    <small>คุณกิติณภัช</small>
+                </div>
+                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.พุนพิน')">
+                    <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
+                    <span class="district-name">อ.พุนพิน</span>
+                    <small>คุณกิติณภัช</small>
+                </div>
+                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.เมือง สุราษฎร์ธานี')">
+                    <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
+                    <span class="district-name">อ.เมือง</span>
+                    <small>คุณกิติณภัช</small>
+                </div>
+                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.บ้านนาเดิม')">
+                    <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
+                    <span class="district-name">อ.บ้านนาเดิม</span>
+                    <small>คุณกิติณภัช</small>
+                </div>
+                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.กาญจนดิษฐ์')">
+                    <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
+                    <span class="district-name">อ.กาญจนดิษฐ์</span>
+                    <small>คุณกิติณภัช</small>
+                </div>
+                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.ดอนสัก')">
+                    <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
+                    <div class="hover-exception-info">ยกเว้น: ศักดา (แบม)</div>
+                    <span class="district-name">อ.ดอนสัก</span>
+                    <small>คุณกิติณภัช</small>
+                </div>
+                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.เกาะสมุย')">
+                    <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
+                    <div class="hover-exception-info">ยกเว้น: มาร์ชพีช (แบม)</div>
+                    <span class="district-name">อ.เกาะสมุย</span>
+                    <small>คุณกิติณภัช</small>
+                </div>
+                <div class="district-box bg-rep2" onclick="analyzeDistrict('อ.เกาะพะงัน')">
+                    <img src="https://i.postimg.cc/8cVzMtMZ/ค_ณโต_ก_ต_ณภ_ช.webp" class="hover-rep-img" alt="คุณกิติณภัช">
+                    <span class="district-name">อ.เกาะพะงัน</span>
+                    <small>คุณกิติณภัช</small>
+                </div>
+
+                <!-- Zone: คุณสมฤทัย -->
+                <div class="district-box bg-rep3" onclick="analyzeDistrict('อ.ชัยบุรี')">
+                    <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
+                    <span class="district-name">อ.ชัยบุรี</span>
+                    <small>คุณสมฤทัย</small>
+                </div>
+                <div class="district-box bg-rep3" onclick="analyzeDistrict('อ.เวียงสระ')">
+                    <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
+                    <span class="district-name">อ.เวียงสระ</span>
+                    <small>คุณสมฤทัย</small>
+                </div>
+                <div class="district-box bg-rep3" onclick="analyzeDistrict('อ.บ้านนาสาร')">
+                    <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
+                    <div class="hover-exception-info">ยกเว้น: ดร.แอ๊ว (โต)</div>
+                    <span class="district-name">อ.บ้านนาสาร</span>
+                    <small>คุณสมฤทัย</small>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- SECTION 2: นครศรีธรรมราช (เพิ่มใหม่) -->
+    <div class="province-title">
+        <h2>จ.นครศรีธรรมราช</h2>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar: รายชื่อ Head Coach นครฯ -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-users"></i> ทีมผู้ดูแลพื้นที่ (Head Coach)
+            </div>
+
+            <!-- คนที่ 1: คุณจินตนา -->
+            <div class="rep-card">
+                <div class="rep-img-container">
+                    <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" alt="คุณจินตนา" class="rep-img">
+                </div>
+                <div class="rep-info">
+                    <h3 class="rep-name text-rep-nst1"><span class="color-dot bg-rep-nst1"></span> คุณจินตนา แก้วพันธุ์ชู</h3>
+                    <ul class="area-list">
+                        <li>อ.ขนอม</li>
+                        <li>อ.สิชล</li>
+                        <li>อ.นบพิตำ</li>
+                        <li>อ.ท่าศาลา</li>
+                        <li>อ.พิปูน</li>
+                        <li>อ.พรหมคีรี</li>
+                        <li>อ.เมือง</li>
+                        <li>อ.ลานสกา</li>
+                        <li>อ.พระพรหม</li>
+                        <li>อ.ปากพนัง</li>
+                        <li>อ.ร่อนพิบูลย์</li>
+                        <li>อ.เฉลิมพระเกียรติ</li>
+                        <li>อ.จุฬาภรณ์</li>
+                        <li>อ.เชียรใหญ่</li>
+                        <li>อ.ชะอวด</li>
+                        <li>อ.หัวไทร</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- คนที่ 2: คุณสมฤทัย (นครฯ) -->
+            <div class="rep-card">
+                <div class="rep-img-container">
+                    <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" alt="คุณสมฤทัย" class="rep-img">
+                </div>
+                <div class="rep-info">
+                    <h3 class="rep-name text-rep-nst2"><span class="color-dot bg-rep-nst2"></span> คุณสมฤทัย แปนุ่น</h3>
+                    <ul class="area-list">
+                        <li>อ.ถ้ำพรรณรา</li>
+                        <li>อ.ฉวาง</li>
+                        <li>อ.ช้างกลาง</li>
+                        <li>อ.นาบอน</li>
+                        <li>อ.ทุ่งใหญ่</li>
+                        <li>อ.ทุ่งสง</li>
+                        <li>อ.บางขัน</li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content: พื้นที่ดูแล นครฯ -->
+        <main class="map-section">
+            <div class="map-header">
+                <h3><i class="fas fa-map"></i> ภาพรวมพื้นที่ (Zoning)</h3>
+                <p>คลิกที่แผนที่เพื่อดูภาพขยาย หรือคลิกที่อำเภอในตารางเพื่อวิเคราะห์ข้อมูล ✨</p>
+            </div>
+
+            <!-- รูปแผนที่จริง พร้อมปุ่มขยาย (นครศรีธรรมราช) -->
+            <div class="map-container" onclick="openImageModal('https://i.postimg.cc/SQLC4K80/kar-bae-ngph-nth-khay-nkhr-sr-‡.jpg')">
+                <img src="https://i.postimg.cc/SQLC4K80/kar-bae-ngph-nth-khay-nkhr-sr-‡.jpg" alt="แผนที่เขตการขาย จ.นครศรีธรรมราช AG-ZIENCE" class="map-img-preview">
+                <div class="zoom-btn"><i class="fas fa-search-plus"></i> ขยายภาพ</div>
+            </div>
+            
+            <div class="district-grid">
+                <!-- Zone: คุณจินตนา (สีชมพู) -->
+                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.ขนอม')">
+                    <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
+                    <span class="district-name">อ.ขนอม</span>
+                    <small>คุณจินตนา</small>
+                </div>
+                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.สิชล')">
+                    <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
+                    <span class="district-name">อ.สิชล</span>
+                    <small>คุณจินตนา</small>
+                </div>
+                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.นบพิตำ')">
+                    <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
+                    <span class="district-name">อ.นบพิตำ</span>
+                    <small>คุณจินตนา</small>
+                </div>
+                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.ท่าศาลา')">
+                    <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
+                    <span class="district-name">อ.ท่าศาลา</span>
+                    <small>คุณจินตนา</small>
+                </div>
+                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.พิปูน')">
+                    <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
+                    <span class="district-name">อ.พิปูน</span>
+                    <small>คุณจินตนา</small>
+                </div>
+                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.พรหมคีรี')">
+                    <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
+                    <span class="district-name">อ.พรหมคีรี</span>
+                    <small>คุณจินตนา</small>
+                </div>
+                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.เมือง นครศรีฯ')">
+                    <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
+                    <span class="district-name">อ.เมือง</span>
+                    <small>คุณจินตนา</small>
+                </div>
+                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.ลานสกา')">
+                    <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
+                    <span class="district-name">อ.ลานสกา</span>
+                    <small>คุณจินตนา</small>
+                </div>
+                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.พระพรหม')">
+                    <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
+                    <span class="district-name">อ.พระพรหม</span>
+                    <small>คุณจินตนา</small>
+                </div>
+                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.ปากพนัง')">
+                    <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
+                    <span class="district-name">อ.ปากพนัง</span>
+                    <small>คุณจินตนา</small>
+                </div>
+                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.ร่อนพิบูลย์')">
+                    <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
+                    <span class="district-name">อ.ร่อนพิบูลย์</span>
+                    <small>คุณจินตนา</small>
+                </div>
+                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.เฉลิมพระเกียรติ')">
+                    <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
+                    <span class="district-name">อ.เฉลิมฯ</span>
+                    <small>คุณจินตนา</small>
+                </div>
+                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.จุฬาภรณ์')">
+                    <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
+                    <span class="district-name">อ.จุฬาภรณ์</span>
+                    <small>คุณจินตนา</small>
+                </div>
+                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.เชียรใหญ่')">
+                    <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
+                    <span class="district-name">อ.เชียรใหญ่</span>
+                    <small>คุณจินตนา</small>
+                </div>
+                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.ชะอวด')">
+                    <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
+                    <span class="district-name">อ.ชะอวด</span>
+                    <small>คุณจินตนา</small>
+                </div>
+                <div class="district-box bg-rep-nst1" onclick="analyzeDistrict('อ.หัวไทร')">
+                    <img src="https://i.postimg.cc/MTm26Rqb/kh-np-c-ntna.webp" class="hover-rep-img" alt="คุณจินตนา">
+                    <span class="district-name">อ.หัวไทร</span>
+                    <small>คุณจินตนา</small>
+                </div>
+
+                <!-- Zone: คุณสมฤทัย (นครฯ) (สีเขียว) -->
+                <div class="district-box bg-rep-nst2" onclick="analyzeDistrict('อ.ถ้ำพรรณรา')">
+                    <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
+                    <span class="district-name">อ.ถ้ำพรรณรา</span>
+                    <small>คุณสมฤทัย</small>
+                </div>
+                <div class="district-box bg-rep-nst2" onclick="analyzeDistrict('อ.ฉวาง')">
+                    <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
+                    <span class="district-name">อ.ฉวาง</span>
+                    <small>คุณสมฤทัย</small>
+                </div>
+                <div class="district-box bg-rep-nst2" onclick="analyzeDistrict('อ.ช้างกลาง')">
+                    <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
+                    <span class="district-name">อ.ช้างกลาง</span>
+                    <small>คุณสมฤทัย</small>
+                </div>
+                <div class="district-box bg-rep-nst2" onclick="analyzeDistrict('อ.นาบอน')">
+                    <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
+                    <span class="district-name">อ.นาบอน</span>
+                    <small>คุณสมฤทัย</small>
+                </div>
+                <div class="district-box bg-rep-nst2" onclick="analyzeDistrict('อ.ทุ่งใหญ่')">
+                    <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
+                    <span class="district-name">อ.ทุ่งใหญ่</span>
+                    <small>คุณสมฤทัย</small>
+                </div>
+                <div class="district-box bg-rep-nst2" onclick="analyzeDistrict('อ.ทุ่งสง')">
+                    <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
+                    <span class="district-name">อ.ทุ่งสง</span>
+                    <small>คุณสมฤทัย</small>
+                </div>
+                <div class="district-box bg-rep-nst2" onclick="analyzeDistrict('อ.บางขัน')">
+                    <img src="https://i.postimg.cc/VvcknDn7/ค_ณแบม_สมฤท_ย.webp" class="hover-rep-img" alt="คุณสมฤทัย">
+                    <span class="district-name">อ.บางขัน</span>
+                    <small>คุณสมฤทัย</small>
+                </div>
+            </div>
+        </main>
+    </div>
+
+   <!-- New Contact Section -->
+    <section class="py-10 bg-white border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4">
+            <img 
+                src="contact2.webp" 
+                alt="Contact Channels AG-ZIENCE" 
+                class="w-full h-auto rounded-xl shadow-sm object-contain mx-auto"
+                onerror="this.style.display='none'; document.getElementById('contact-fallback').classList.remove('hidden');"
+            >
+
+            <div id="contact-fallback" class="hidden">
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-8 p-6 bg-gray-50 rounded-2xl border border-gray-200">
+                    <div class="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
+                        <div class="w-48 h-auto flex-shrink-0">
+                            <img src="https://i.postimg.cc/Jh8b2SdJ/logo-ag-zience-02.png" alt="AG-ZIENCE Logo" class="w-full h-full object-contain">
+                        </div>
+                        <div class="w-20 h-20 bg-white rounded-lg p-2 shadow-sm border border-gray-100 flex-shrink-0">
+                            <img src="https://i.postimg.cc/FR0vwZg8/logo-thippruk-stork-white-01.png" alt="Thippruk" class="w-full h-full object-contain">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-3 w-full max-w-lg">
+                        <a href="https://www.facebook.com/groups/159157714503728/" target="_blank" class="flex items-center gap-3 bg-white p-2 rounded-lg shadow-sm hover:bg-blue-50 transition-colors border border-gray-100 group">
+                            <i class="fa-brands fa-facebook text-blue-600 text-3xl w-8 text-center group-hover:scale-110 transition-transform"></i>
+                            <span class="font-medium text-gray-700 group-hover:text-blue-700">ใส่ปุ๋ยให้ถูกพืชก็งาม by อ.ภพ</span>
+                        </a>
+                        <a href="https://line.me/ti/g2/I7FoCIyNFx5P3g3duDjoq9AYF4OYvE6ZERNBfQ?utm_source=invitation&utm_medium=QR_code&utm_campaign=default" target="_blank" class="flex items-center gap-3 bg-white p-2 rounded-lg shadow-sm hover:bg-green-50 transition-colors border border-gray-100 group">
+                            <i class="fa-brands fa-line text-green-500 text-3xl w-8 text-center group-hover:scale-110 transition-transform"></i>
+                            <div class="flex flex-col">
+                                <span class="font-medium text-gray-700 group-hover:text-green-700">ปุ๋ยอ.ภพ #ทุเรียนคุณภาพ</span>
+                                <span class="text-xs text-green-600 bg-green-100 px-2 py-0.5 rounded-full w-fit">OpenChat</span>
+                            </div>
+                        </a>
+                        <a href="https://vt.tiktok.com/ZSAUQpRvp/" target="_blank" class="flex items-center gap-3 bg-white p-2 rounded-lg shadow-sm hover:bg-gray-50 transition-colors border border-gray-100 group">
+                            <i class="fa-brands fa-tiktok text-black text-3xl w-8 text-center group-hover:scale-110 transition-transform"></i>
+                            <span class="font-medium text-gray-700 group-hover:text-black">metalpob</span>
+                        </a>
+                        <a href="https://www.youtube.com/@ajarnpobsak1613" target="_blank" class="flex items-center gap-3 bg-white p-2 rounded-lg shadow-sm hover:bg-red-50 transition-colors border border-gray-100 group">
+                            <i class="fa-brands fa-youtube text-red-600 text-3xl w-8 text-center group-hover:scale-110 transition-transform"></i>
+                            <span class="font-medium text-gray-700 group-hover:text-red-700">Ajarn Pobsak</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-8">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-sm">© 2024 สาระดีๆ จากปุ๋ยอ.ภพ เพื่อพี่น้องชาวสวนทุเรียน</p>
+        </div>
+    </footer>
+
+    <!-- AI Modal -->
+    <div class="modal-overlay" id="aiModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <h3 id="modalTitle" style="color: var(--primary-green); margin-top:0;">Gemini Assistant ✨</h3>
+            <div id="modalBody">
+                <!-- Content will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Lightbox Modal -->
+    <div id="imageModal" class="image-modal-overlay" onclick="closeImageModal()">
+        <span class="image-modal-close" onclick="closeImageModal()">&times;</span>
+        <img class="image-modal-content" id="img01">
+    </div>
+
+    <script type="module">
+        import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+
+        const apiKey = ""; // System provides the key
+        const genAI = new GoogleGenerativeAI(apiKey);
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-preview-09-2025" });
+
+        // Make functions globally available
+        window.analyzeDistrict = async function(districtName) {
+            openModal("กำลังวิเคราะห์ข้อมูลการเกษตร " + districtName + "...");
+            
+            const prompt = `ในฐานะผู้เชี่ยวชาญด้านการเกษตรและปุ๋ยของ AG-ZIENCE:
+            ช่วยวิเคราะห์ข้อมูลของ "${districtName} จ.สุราษฎร์ธานี หรือ จ.นครศรีธรรมราช" (ระบุให้ชัดเจนตามชื่ออำเภอ) สั้นๆ:
+            1. พืชเศรษฐกิจหลักในพื้นที่นี้คืออะไร? (เน้น ปาล์มน้ำมัน, ยางพารา, ทุเรียน, หรือผลไม้อื่นๆ)
+            2. แนวโน้มปัญหาพืชหรือศัตรูพืชที่พบบ่อยในช่วงนี้
+            3. แนะนำผลิตภัณฑ์ปุ๋ยหรือเคมีเกษตรที่น่าจะขายดีในพื้นที่นี้
+            
+            ตอบเป็นภาษาไทย กระชับ เป็นข้อๆ และเป็นกันเอง`;
+
+            try {
+                const result = await model.generateContent(prompt);
+                const response = await result.response;
+                updateModalContent(`🌱 ข้อมูลเชิงลึก: ${districtName}`, response.text());
+            } catch (error) {
+                updateModalContent("เกิดข้อผิดพลาด", "ไม่สามารถเชื่อมต่อกับ AI ได้ในขณะนี้ กรุณาลองใหม่อีกครั้ง");
+                console.error(error);
+            }
+        };
+
+        // Modal Helpers for AI
+        const modal = document.getElementById('aiModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+
+        window.openModal = function(loadingText) {
+            modal.style.display = 'flex';
+            modalTitle.innerText = "Gemini Assistant ✨";
+            modalBody.innerHTML = `<div style="text-align:center; padding: 20px;"><div class="loading-spinner"></div> ${loadingText}</div>`;
+        }
+
+        function updateModalContent(title, text) {
+            modalTitle.innerText = title;
+            // Convert simple markdown to HTML tags for better display
+            let formattedText = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\* (.*?)\n/g, '<li>$1</li>')
+                .replace(/\n/g, '<br>');
+            
+            modalBody.innerHTML = `<div class="ai-response">${formattedText}</div>`;
+        }
+
+        window.closeModal = function() {
+            modal.style.display = 'none';
+        }
+
+        // Image Lightbox Helpers
+        window.openImageModal = function(src) {
+            document.getElementById('imageModal').style.display = "flex";
+            document.getElementById('img01').src = src;
+        }
+
+        window.closeImageModal = function() {
+            document.getElementById('imageModal').style.display = "none";
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
